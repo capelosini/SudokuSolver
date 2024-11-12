@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 //#include <time.h>
 // #include <string.h>
 
@@ -89,6 +90,28 @@
 //     return changes;
 // }
 
+// void clearUnknown(int (*game)[9], int number){
+//     for(int i=0; i<3; i++){
+//         for(int j=0; j<3; j++){
+//             int startPosX=3*j;
+//             int startPosY=3*i;
+//             int s = 0;
+//             for (int y=startPosY; y<startPosY+3; y++){
+//                 for (int x=startPosX; x<startPosX+3; x++){
+//                     s+=game[y][x];
+//                 }
+//             }
+//             if (s != 0 && s != number){
+//                 for (int y=startPosY; y<startPosY+3; y++){
+//                     for (int x=startPosX; x<startPosX+3; x++){
+//                         game[y][x]=0;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
 unsigned char isWrong(int game[9][9], int number, int x, int y){
     if (number < 1 || x < 0 || x >= 9 || y < 0 || y>= 9){
         return 1;
@@ -165,7 +188,8 @@ void printGame(int game[9][9]){
     printf("------------------------\n\n");
 }
 
-void findNumbersPosLines(int (*game)[9], int number){
+void findNumbersPos(int (*game)[9], int number){
+    // horizontal line
     for (int i=0; i<9; i++){
         unsigned char alr=0;
         for(int j=0; j<9; j++){
@@ -178,28 +202,6 @@ void findNumbersPosLines(int (*game)[9], int number){
                         game[i][a]=0;
                     }
                     break;
-                }
-            }
-        }
-    }
-}
-
-void clearUnknown(int (*game)[9], int number){
-    for(int i=0; i<3; i++){
-        for(int j=0; j<3; j++){
-            int startPosX=3*j;
-            int startPosY=3*i;
-            int s = 0;
-            for (int y=startPosY; y<startPosY+3; y++){
-                for (int x=startPosX; x<startPosX+3; x++){
-                    s+=game[y][x];
-                }
-            }
-            if (s != 0 && s != number){
-                for (int y=startPosY; y<startPosY+3; y++){
-                    for (int x=startPosX; x<startPosX+3; x++){
-                        game[y][x]=0;
-                    }
                 }
             }
         }
@@ -231,9 +233,8 @@ void solve(int (*game)[9]){
     while (lastSum != 405){
         for (int i=0; i<9; i++){
             enumN(game, nGames[i], i+1);
-            findNumbersPosLines(nGames[i], i+1);
+            findNumbersPos(nGames[i], i+1);
             //while (findNumbersPosBlocks(nGames[i], i+1) != 0);
-            clearUnknown(nGames[i], i+1);
             merge(game, nGames[i]);
             sleep();
             printGame(game);
